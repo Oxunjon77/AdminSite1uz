@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Maneger;
+using DataAsseccLayer.Concreat;
 using DataAsseccLayer.EntityFramework;
 using EntityLayer.Concreat;
 using Microsoft.AspNetCore.Identity;
@@ -8,7 +9,13 @@ namespace RealMVCprogect.Controllers
 {
     public class UsersController : Controller
     {
-        UsersManeger usersManeger = new UsersManeger(new EfUserDl());
+        private readonly UsersManeger usersManeger;
+        private readonly AppDbContext _context;
+        public UsersController(AppDbContext context)
+        {
+            _context = context;
+            usersManeger = new UsersManeger(new EfUserDl(_context));
+        }
 
         public IActionResult Index()
         {

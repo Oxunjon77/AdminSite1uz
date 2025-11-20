@@ -8,11 +8,12 @@ namespace RealMVCprogect.Controllers
 {
     public class AdminController : Controller
     {
-        UsersManeger usersManeger = new UsersManeger(new EfUserDl());
+        private readonly UsersManeger usersManeger;
         private readonly AppDbContext _ctx;
         public AdminController(AppDbContext appDbContext)
         {
             _ctx = appDbContext ?? throw new ArgumentNullException(nameof(appDbContext));
+            usersManeger = new UsersManeger(new EfUserDl(_ctx));
         }
         public IActionResult Index()
         {

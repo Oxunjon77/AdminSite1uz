@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Maneger;
 using BusinessLayer.ValidationRele;
+using DataAsseccLayer.Concreat;
 using DataAsseccLayer.EntityFramework;
 using EntityLayer.Concreat;
 using FluentValidation.Results;
@@ -9,9 +10,17 @@ namespace RealMVCprogect.Controllers
 {
     public class MessageController : Controller
     {
-        MessageManeger message = new MessageManeger(new EfMessageDl());
-        MessageValidator messagevalidator = new MessageValidator();
-       
+       private readonly MessageManeger message;
+       private readonly MessageValidator messagevalidator;
+       private readonly AppDbContext _context;
+
+        public MessageController(AppDbContext context, MessageValidator validator)
+        {
+            _context = context;
+            messagevalidator = validator;
+            message = new MessageManeger(new EfMessageDl(_context));
+
+        }
 
         public IActionResult Inbox()
         {

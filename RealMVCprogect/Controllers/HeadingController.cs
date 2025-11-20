@@ -1,5 +1,6 @@
 ﻿using BusinessLayer;
 using BusinessLayer.Maneger;
+using DataAsseccLayer.Concreat;
 using DataAsseccLayer.EntityFramework;
 using EntityLayer.Concreat;
 using Microsoft.AspNetCore.Mvc;
@@ -9,20 +10,28 @@ namespace RealMVCprogect.Controllers
 {
     public class HeadingController : Controller
     {
-        HeadingManager hm = new HeadingManager(new EfHeadingDl());
-        CategoryManager cm = new CategoryManager( new EfCategoryDl());
-        WriterMeneger wm = new WriterMeneger(new EfWriterDl());
+       private readonly HeadingManager _headingManeger;
+       private readonly CategoryManager _categoryManager;
+       private readonly WriterMeneger _writerMeneger;
+        private readonly AppDbContext _context;
 
+        public HeadingController(AppDbContext context)
+        {
+            _context = context;
+            _headingManeger = new HeadingManager(new EfHeadingDl(_context));
+            _categoryManager = new CategoryManager(new EfCategoryDl(_context));
+            _writerMeneger = new WriterMeneger(new EfWriterDl(_context));
+        }
         public IActionResult Index()
         {
-            var heading = hm.GetList();
+            var heading = _headingManeger.GetList();
             return View(heading);
         }
 
         [HttpGet]
         public IActionResult AddHeading()
         {
-            var categoryvalue = (from x in cm.GetList()
+            var categoryvalue = (from x in _categoryManager.GetList()
                          select new SelectListItem
                          {
                              Text = x.CotegoryName,
@@ -30,7 +39,7 @@ namespace RealMVCprogect.Controllers
                          });
             List<SelectListItem> value = categoryvalue.ToList();
 
-            var writervalue = (from x in wm.GetList()
+            var writervalue = (from x in _writerMeneger.GetList()
                                select new SelectListItem
                                {
                                    Text = x.WriterName,
@@ -50,13 +59,13 @@ namespace RealMVCprogect.Controllers
             DateTime data = DateTime.UtcNow;
             DateTime Utcdata = DateTime.SpecifyKind(data, DateTimeKind.Utc);    
             heading.HeadingDate = Utcdata;
-            hm.HeadingAddBl(heading);
+            _headingManeger.HeadingAddBl(heading);
             return RedirectToAction("Index");
         }
 
         public IActionResult EditHeading(int id)
         {
-            var categoryvalue = (from x in cm.GetList()
+            var categoryvalue = (from x in _categoryManager.GetList()
                                  select new SelectListItem
                                  {
                                      Text = x.CotegoryName,
@@ -67,7 +76,7 @@ namespace RealMVCprogect.Controllers
             ViewBag.vlc = value;
             
 
-            var headingValue = hm.GetById(id);
+            var headingValue = _headingManeger.GetById(id);
             return View(headingValue);
         }
 
@@ -77,16 +86,16 @@ namespace RealMVCprogect.Controllers
             DateTime data = DateTime.UtcNow;
             DateTime Utcdata = DateTime.SpecifyKind(data, DateTimeKind.Utc);
             p.HeadingDate = Utcdata;
-            hm.HeadingUpdateBl(p);
+            _headingManeger.HeadingUpdateBl(p);
             return RedirectToAction("Index");
 
         }
 
         public IActionResult DeleteHeading(int id)
         {
-            var delete = hm.GetById(id);
+            var delete = _headingManeger.GetById(id);
             delete.Headingstatus = false;
-                hm.HeadingDeleteBl(delete);
+                _headingManeger.HeadingDeleteBl(delete);
             return RedirectToAction("Index");
         }
     }

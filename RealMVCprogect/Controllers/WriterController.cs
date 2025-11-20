@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Maneger;
 using BusinessLayer.ValidationRele;
+using DataAsseccLayer.Concreat;
 using DataAsseccLayer.EntityFramework;
 using EntityLayer.Concreat;
 using FluentValidation.Results;
@@ -10,10 +11,16 @@ namespace RealMVCprogect.Controllers
 {
     public class WriterController : Controller
     {
-        WriterMeneger meneger = new WriterMeneger(new EfWriterDl());
-        //WriterMeneger meneger = new WriterMeneger(new EfWriterDl());
+       private readonly WriterMeneger meneger;
+
         WriterValidation writervalidation = new WriterValidation();
-    
+        private readonly AppDbContext _context;
+        public WriterController(AppDbContext context)
+        {
+            _context = context;
+            meneger = new WriterMeneger(new EfWriterDl(_context));
+        }
+
         public IActionResult Index()
         {
             var WriterValues = meneger.GetList();

@@ -1,4 +1,5 @@
-﻿using DataAsseccLayer.Concreat;
+﻿
+using DataAsseccLayer.Concreat;
 using DataAsseccLayer.Repostory.Interfase;
 using EntityLayer.Concreat;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,11 @@ namespace DataAsseccLayer.Repostory
 {
     public class GenericRepostory<T> : IRepostory<T> where T : class
     {
-        AppDbContext dbContext = new AppDbContext();
-        DbSet<T> _object;
-        public GenericRepostory()
+        private readonly AppDbContext dbContext;
+        private readonly DbSet<T> _object;
+        public GenericRepostory(AppDbContext ctx)
         {
+            dbContext = ctx;
             _object = dbContext.Set<T>();
         }
 
@@ -25,7 +27,7 @@ namespace DataAsseccLayer.Repostory
         {
             var deleteEntity = dbContext.Entry(p);
             deleteEntity.State = EntityState.Deleted;
-           // _object.Remove(p);
+            // _object.Remove(p);   
             dbContext.SaveChanges();
         }
 
@@ -66,9 +68,9 @@ namespace DataAsseccLayer.Repostory
 
                 Console.WriteLine(ex);
             }
-            
+
         }
 
-        
+
     }
 }

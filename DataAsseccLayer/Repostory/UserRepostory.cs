@@ -14,9 +14,14 @@ namespace DataAsseccLayer.Repostory
 {
     public class UserRepostory : IUserDl
     {
-        AppDbContext dbContext = new AppDbContext();
-        DbSet<Users> _object;
+        private readonly AppDbContext dbContext;
+        private readonly DbSet<Users> _object;
 
+        public UserRepostory(AppDbContext context)
+        {
+            dbContext = context;
+            _object = dbContext.Set<Users>();
+        }
 
         public void Delete(Users p)
         {

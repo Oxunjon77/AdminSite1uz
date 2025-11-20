@@ -1,4 +1,6 @@
-﻿using DataAsseccLayer.Repostory;
+﻿
+using DataAsseccLayer.Concreat;
+using DataAsseccLayer.Repostory;
 using DataAsseccLayer.Repostory.Interfase;
 using EntityLayer.Concreat;
 using System;
@@ -11,5 +13,8 @@ namespace DataAsseccLayer.EntityFramework
 {
     public class EfNews : GenericRepostory<News>, INewsDL
     {
+        public EfNews(AppDbContext ctx) : base(ctx)
+        {
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using DataAsseccLayer.Repostory;
+﻿using DataAsseccLayer.Concreat;
+using DataAsseccLayer.Repostory;
 using DataAsseccLayer.Repostory.Interfase;
 using EntityLayer.Concreat;
 using System;
@@ -11,6 +12,8 @@ namespace DataAsseccLayer.EntityFramework
 {
     public class EfUserDl : GenericRepostory<Users>, IUserDl
     {
-
+        public EfUserDl(AppDbContext ctx) : base(ctx)
+        {
+        }
     }
 }

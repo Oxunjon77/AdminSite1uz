@@ -14,9 +14,13 @@ namespace DataAsseccLayer.Repostory
 {
     public class WriterRepostory : IWriterDl
     {
-        AppDbContext dbContext = new AppDbContext();
-        DbSet<Writer> _obgect;
-
+        private readonly AppDbContext dbContext;
+        private readonly DbSet<Writer> _obgect;
+        public WriterRepostory(AppDbContext context)
+        {
+            dbContext = context;
+            _obgect = dbContext.Set<Writer>();
+        }
         public void Delete(Writer p)
         {
             _obgect?.Remove(p);

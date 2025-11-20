@@ -14,10 +14,13 @@ namespace EntityLayer.Concreat
         public string Content { get; set; }
         public DateTime PublishDate { get; set; } = DateTime.Now;
         public int UserId { get; set; }
-        public string? photoNews { get; set; } 
+        public string? photoNews { get; set; }
         public int status { get; set; }
         public Users Users { get; set; }
         public DateTime? ScheduledDate { get; set; }
+        public string? TitleRu { get; set; }
+        public string? ContentRu { get; set; }
+        public string? PhotoNewsRu { get; set; }
         public virtual ICollection<Photos> Images { get; set; } = new List<Photos>();
     }
 }

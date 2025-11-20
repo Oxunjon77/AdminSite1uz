@@ -23,15 +23,15 @@
                     let target = event.target;
                     let { width, height } = event.rect;
 
-                    // Rasmni yangi o'lchamlarda yangilash
+        
                     target.style.width = `${width}px`;
                     target.style.height = `${height}px`;
                 }
             },
             modifiers: [
                 interact.modifiers.restrictSize({
-                    min: { width: 50, height: 50 },  // Minimal o'lcham
-                    max: { width: 600, height: 600 } // Maksimal o'lcham
+                    min: { width: 50, height: 50 },  
+                    max: { width: 600, height: 600 } 
                 })
             ]
         })

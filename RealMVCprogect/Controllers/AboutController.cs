@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Maneger;
+using DataAsseccLayer.Concreat;
 using DataAsseccLayer.EntityFramework;
 using EntityLayer.Concreat;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,13 @@ namespace RealMVCprogect.Controllers
     public class AboutController : Controller
     {
 
-        AboutManager manager = new AboutManager(new EfAboutDl());
+        private readonly AboutManager manager;
+        private readonly AppDbContext _context;
+        public AboutController(AppDbContext context)
+        {
+            _context = context;
+            manager = new AboutManager(new EfAboutDl(_context));
+        }
         public IActionResult Index()
         {
             var getvalue = manager.GetList();

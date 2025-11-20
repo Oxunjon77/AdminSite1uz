@@ -14,13 +14,19 @@ namespace DataAsseccLayer.Repostory
 {
     public class HeadingRepostory : IHeadingDl
     {
-        AppDbContext context = new AppDbContext();
-        DbSet<Heading>? _heading;
+        private readonly AppDbContext _context;
+        private readonly DbSet<Heading>? _heading;
+
+        public HeadingRepostory(AppDbContext context)
+        {
+            _context = context;
+            _heading = _context.Set<Heading>();
+        }
 
         public void Delete(Heading p)
         {
             _heading?.Remove(p);
-            context.SaveChanges();
+            _context.SaveChanges();
         }
 
         public Heading Get(Expression<Func<Heading, bool>> filter)
@@ -32,13 +38,13 @@ namespace DataAsseccLayer.Repostory
         {
 
            return _heading.ToList();
-            context.SaveChanges();
+            _context.SaveChanges();
         }
 
         public void Insert(Heading p)
         {
              _heading.Add(p);
-            context.SaveChanges();
+            _context.SaveChanges();
         }
 
         public List<Heading> List(Expression<Func<Heading, bool>> filter)
@@ -48,7 +54,7 @@ namespace DataAsseccLayer.Repostory
 
         public void Update(Heading p)
         {
-            context.SaveChanges();
+            _context.SaveChanges();
         }
     }
 }

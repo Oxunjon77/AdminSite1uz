@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let selectedLanguages = [];
 
-    // Selectdan til tanlaganda ishlaydi
+
     select.addEventListener("change", function () {
         const selectedValue = select.value;
 
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function updateUI() {
-        // Input maydoniga tanlangan tillarni qo‘yish
+
         inputField.value = selectedLanguages.join(", ");
         inputContainer.style.display = selectedLanguages.length > 0 ? "block" : "none";
 
@@ -95,13 +95,13 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-        // Agar hammasi tanlangan bo'lsa, select menyusini yashirish
+
         select.style.display = selectedLanguages.length === allLanguages.length ? "none" : "block";
     }
 });
 
 $(document).ready(function () {
-    // Ismni tekshirish
+
     $('#Name').on('blur', function () {
         let name = $(this).val();
 
@@ -128,7 +128,7 @@ $(document).ready(function () {
         });
     });
 
-    // Parolni tekshirish
+
     $('#PasswordHash').on('blur', function () {
         let password = $(this).val();
 
@@ -155,7 +155,7 @@ $(document).ready(function () {
         });
     });
 
-    // Email tekshiruvi
+
     $('#Email').on('blur', function () {
         let email = $(this).val();
 

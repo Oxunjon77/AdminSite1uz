@@ -1,39 +1,51 @@
+using BusinessLayer;
+using BusinessLayer.Maneger;
 using DataAsseccLayer.Concreat;
+using DataAsseccLayer.EntityFramework;
+using DataAsseccLayer.Repostory;
+using DataAsseccLayer.Repostory.Interfase;
 using DataAsseccLayer.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<DataAsseccLayer.Concreat.AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<ICategoryDl, CategoryRepostory>();
+builder.Services.AddScoped<IAboutDl, EfAboutDl>();
+builder.Services.AddScoped<AboutManager>(); 
+
+builder.Services.AddScoped<ICategoryDl, EfCategoryDl>();
+builder.Services.AddScoped<CategoryManager>();
 
 
-
-// Add services to the container.
-StaartUp(builder.Services, builder.Configuration);
-builder.Services.AddDbContext<AppDbContext>();
+Startup(builder.Services, builder.Configuration);
 builder.Services.AddHostedService<NewsSchedulerService>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(1600); // Время жизни сессии
+    options.IdleTimeout = TimeSpan.FromMinutes(1600); 
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddAntiforgery();
 
 var app = builder.Build();
 app.UseSession();
-// Configure the HTTP request pipeline.
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-	app.UseHsts();
+    app.UseHsts();
 }
 app.UseStaticFiles();
 
-//app.UseExceptionHandler("/ErrorPage/Page404/"); // Xatolar sahifasiga yo'naltirish
 
-//app.UseStatusCodePagesWithRedirects("/ErrorPage/Page404/"); // Muayyan xato koddagi muharrirga yo'naltirish
 
 app.UseHttpsRedirection();
 
@@ -41,33 +53,29 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Login}/{action=Index}/{id?}");
 app.MapRazorPages();
 app.Run();
 
-static void StaartUp(IServiceCollection services, ConfigurationManager manager)
+static void Startup(IServiceCollection services, ConfigurationManager manager)
 {
     services.AddControllersWithViews();
+    services.AddRazorPages();
 
-        services.AddControllersWithViews();
+    services.AddAuthentication(
 
-
-	//services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
-
-	services.AddAuthentication(
-
-		CookieAuthenticationDefaults.AuthenticationScheme).
-		AddCookie(options =>
-		{
-			options.LogoutPath = "/Login/Index";
-		});
+        CookieAuthenticationDefaults.AuthenticationScheme).
+        AddCookie(options =>
+        {
+            options.LogoutPath = "/Login/Index";
+        });
 
 
-	services.AddHttpContextAccessor();
-	services.AddMvc();
-	services.AddControllersWithViews();
-} 
+    services.AddHttpContextAccessor();
+
+
+}

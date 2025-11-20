@@ -1,5 +1,6 @@
 ﻿using BusinessLayer;
 using BusinessLayer.ValidationRele;
+using DataAsseccLayer.Concreat;
 using DataAsseccLayer.EntityFramework;
 using EntityLayer.Concreat;
 using FluentValidation.Results;
@@ -11,9 +12,13 @@ namespace RealMVCprogect.Controllers
 {
     public class CategoryController1 : Controller
     {
-        CategoryManager manager = new CategoryManager(new EfCategoryDl());
-
-      
+        private readonly CategoryManager manager;
+        private readonly AppDbContext _context;
+        public CategoryController1(AppDbContext context)
+        {
+            _context = context;
+            manager = new CategoryManager(new EfCategoryDl(context));
+        }
         public IActionResult Index()
         {
             return View();

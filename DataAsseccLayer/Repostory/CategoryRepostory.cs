@@ -14,9 +14,13 @@ namespace DataAsseccLayer.Repostory
 {
     public class CategoryRepostory : ICategoryDl
     {
-        AppDbContext dbContext = new AppDbContext();
-        DbSet<Category> _object;
-
+        private readonly AppDbContext dbContext;
+        private readonly DbSet<Category> _object;
+        public CategoryRepostory(AppDbContext context)
+        {
+            dbContext = context;
+            _object = dbContext.Set<Category>();
+        }
         public void Delete(Category p)
         {
             _object?.Remove(p);

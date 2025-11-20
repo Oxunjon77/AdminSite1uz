@@ -5,10 +5,10 @@ function previewImage(event) {
     reader.onload = function () {
         var output = document.getElementById('image-preview');
         output.src = reader.result;
-        output.style.display = 'block'; // Rasmni ko'rsatish
+        output.style.display = 'block'; 
     }
 
-    reader.readAsDataURL(event.target.files[0]); // Tanlangan rasmni o'qish
+    reader.readAsDataURL(event.target.files[0]); 
 }
 
 
@@ -45,7 +45,7 @@ function validateForm() {
     }
 
 
-    Swal.fire({                                            // bu qisimda yangiliklar yaratilgandandan keyin  Asosiy qisimga o`tib ketishi va yoki chernovekga o`tish qismini sozlab beradi`
+    Swal.fire({                                     
         title: 'Статус танланг',
         text: "Янгиликни қайси ҳолатда сақламоқчисиз?",
         icon: 'question',
@@ -56,10 +56,10 @@ function validateForm() {
         cancelButtonText: 'Бекор қилиш'
     }).then((result) => {
         const form = document.querySelector("form");
-        if (result.isConfirmed) {                                       //Asasiy qisimga o`tish tugmasi bosilganda(Prod) /News/Index sahifasiga yo`naltiradi`
+        if (result.isConfirmed) {                                       
             document.getElementById("Status").value = 1;
 
-            // AJAX orqali yuborib, so'ngra yo'naltirish
+
             const formData = new FormData(form);
             fetch(form.action, {
                 method: "POST",
@@ -72,7 +72,7 @@ function validateForm() {
                         Swal.fire("Хатолик!", "Маълумотларни сақлаб бўлмади", "error");
                     }
                 });
-        } else if (result.isDenied) {                                       //Chernover qisimga o`tish tugmasi bosilganida  /Test_news/Index  sahifasiga yo`naltiradi
+        } else if (result.isDenied) {                                      
             document.getElementById("Status").value = 0;
 
             const formData = new FormData(form);

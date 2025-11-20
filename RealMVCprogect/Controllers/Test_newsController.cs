@@ -9,6 +9,7 @@ namespace RealMVCprogect.Controllers
     public class Test_newsController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly NewsManager _newsManager;
         private static int _id;
 
         public Test_newsController(AppDbContext context)
@@ -16,25 +17,26 @@ namespace RealMVCprogect.Controllers
             _context = context ?? throw new ArgumentNullException(nameof(context));
             var isUser = _context.Users.FirstOrDefault(n => n.Name == CurrentUser.UserName);
             _id = isUser.id;
+            _newsManager = new NewsManager(new EfNews(context));
         }
 
 
-        NewsManager manager = new NewsManager(new EfNews());
+        // NewsManager manager = new NewsManager(new EfNews());
         public IActionResult Index()
         {
-            var gettestNews = manager.GetList();
+            var gettestNews = _newsManager.GetList();
             return View(gettestNews);
         }
 
         [HttpGet]
         public IActionResult TestGetByIdNew(int Id)
         {
-            var getId = manager.GetById(Id);
+            var getId = _newsManager.GetById(Id);
             return View(getId);
         }
 
         [HttpPost]
-        public async Task<IActionResult> TestUploadNews(int newsId, string title, string content, int status, IFormFile[] files, DateTime? ScheduledDate)
+        public async Task<IActionResult> TestUploadNews(int newsId, string title, string titleRu, string content, string contentRu, int status, IFormFile[] files, IFormFile[] filesRu, DateTime? ScheduledDate)
         {
             var news = _context.News.FirstOrDefault(n => n.Id == newsId);
 
@@ -43,7 +45,9 @@ namespace RealMVCprogect.Controllers
             {
                 // Yangilikni yangilash
                 news.Title = title;
+                news.TitleRu = titleRu;
                 news.Content = content;
+                news.ContentRu = contentRu;
                 news.PublishDate = DateTime.Now;
                 news.status = status;
                 news.ScheduledDate = ScheduledDate;
@@ -73,6 +77,32 @@ namespace RealMVCprogect.Controllers
                     news.photoNews = $"/uploads/{file.FileName}";
                 }
 
+                if (filesRu != null && filesRu.Length > 0)
+                {
+                    // Eski rasmni o'chirish
+                    if (!string.IsNullOrEmpty(news.PhotoNewsRu))
+                    {
+                        var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", news.PhotoNewsRu.TrimStart('/'));
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath); // Eski rasmni o'chirish
+                        }
+                    }
+
+                    // Yangi rasmni saqlash
+                    var file = filesRu[0];  // Birinchi faylni olish
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", file.FileName);
+
+                    // Faylni yuklash
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    // Rasm yo'lini yangilash
+                    news.PhotoNewsRu = $"/uploads/{file.FileName}";
+                }
+
                 // Yangilangan ma'lumotlarni saqlash
                 _context.News.Update(news);
                 await _context.SaveChangesAsync();
@@ -85,7 +115,7 @@ namespace RealMVCprogect.Controllers
         [HttpGet]
         public IActionResult TestDeleteNews(int Id)
         {
-            var getdate = manager.GetById(Id);
+            var getdate = _newsManager.GetById(Id);
             return View(getdate);
         }
 
@@ -95,7 +125,7 @@ namespace RealMVCprogect.Controllers
 
         public IActionResult TestConfirmDeleteNews(int newsId)
         {
-            var news = manager.GetById(newsId);
+            var news = _newsManager.GetById(newsId);
             if (news == null)
             {
                 TempData["Error"] = "Янгилик топилмади.";
@@ -116,7 +146,7 @@ namespace RealMVCprogect.Controllers
             }
 
             // Yangilikni bazadan o‘chirish
-            manager.NewsDeleteBl(news);
+            _newsManager.NewsDeleteBl(news);
 
             TempData["Success"] = "Янгилик ва расм муваффақиятли ўчирилди.";
             return RedirectToAction("Index");

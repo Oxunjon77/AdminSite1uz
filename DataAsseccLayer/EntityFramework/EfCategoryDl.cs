@@ -1,4 +1,5 @@
-﻿using DataAsseccLayer.Repostory;
+﻿using DataAsseccLayer.Concreat;
+using DataAsseccLayer.Repostory;
 using DataAsseccLayer.Repostory.Interfase;
 using EntityLayer.Concreat;
 using System;
@@ -11,7 +12,9 @@ namespace DataAsseccLayer.EntityFramework
 {
     public class EfCategoryDl : GenericRepostory<Category>,ICategoryDl
     {
-
+        public EfCategoryDl(AppDbContext ctx) : base(ctx)
+        {
+        }
     }
 
 }

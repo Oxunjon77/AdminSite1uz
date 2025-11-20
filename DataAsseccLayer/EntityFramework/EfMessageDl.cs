@@ -1,4 +1,5 @@
-﻿using DataAsseccLayer.Repostory;
+﻿using DataAsseccLayer.Concreat;
+using DataAsseccLayer.Repostory;
 using DataAsseccLayer.Repostory.Interfase;
 using EntityLayer.Concreat;
 using System;
@@ -11,5 +12,8 @@ namespace DataAsseccLayer.EntityFramework
 {
     public class EfMessageDl : GenericRepostory<Message>, IMessageDl
     {
+        public EfMessageDl(AppDbContext ctx) : base(ctx)
+        {
+        }
     }
 }

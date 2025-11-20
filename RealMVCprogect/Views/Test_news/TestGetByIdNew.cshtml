@@ -98,62 +98,62 @@
         const scheduledDateInput = document.getElementById('scheduledDateInput');
         const countdown = document.getElementById('countdown');
 
-        // Checkboxni tekshirib, datetime pickerni ko'rsatish yoki yashirish
+      
         if (checkbox.checked) {
             datePicker.style.display = 'block';
 
-            // Agar datetime pickerda sana tanlangan bo'lsa, hidden inputga qiymatni yozish
-            const scheduledDate = datePicker.value; // "YYYY-MM-DDTHH:mm" formatida
+            
+            const scheduledDate = datePicker.value; 
             if (scheduledDate) {
-                scheduledDateInput.value = scheduledDate; // To'g'ri formatda qiymatni saqlash
-                localStorage.setItem('scheduledDate', scheduledDate); // Tanlangan sana va vaqtni localStorage'ga saqlash
-                startCountdown(scheduledDate);  // Tanlangan sana va vaqt bo'yicha countdownni boshlash
+                scheduledDateInput.value = scheduledDate; 
+                localStorage.setItem('scheduledDate', scheduledDate); 
+                startCountdown(scheduledDate);  
             }
         } else {
             datePicker.style.display = 'none';
-            scheduledDateInput.value = '';  // Agar checkbox o'chirilgan bo'lsa, hidden inputni tozalash
-            countdown.style.display = 'none';  // Countdownni yashirish
-            localStorage.removeItem('scheduledDate'); // Tanlangan sana va vaqtni localStorage'dan o'chirish
+            scheduledDateInput.value = '';  
+            countdown.style.display = 'none';  
+            localStorage.removeItem('scheduledDate'); 
         }
     }
 
-    // Vaqtni va sana o'zgarganda, hidden inputga saqlash
+    
     document.getElementById('scheduledDatePicker').addEventListener('change', function () {
-        const scheduledDate = this.value; // Soat va sana
+        const scheduledDate = this.value; 
         const scheduledDateInput = document.getElementById('scheduledDateInput');
         const countdown = document.getElementById('countdown');
 
         if (scheduledDate) {
-            scheduledDateInput.value = scheduledDate; // To'g'ri formatda saqlash
-            localStorage.setItem('scheduledDate', scheduledDate); // Tanlangan sana va vaqtni localStorage'ga saqlash
-            startCountdown(scheduledDate);  // Tanlangan sana va vaqtni countdownga qo'shish
+            scheduledDateInput.value = scheduledDate; 
+            localStorage.setItem('scheduledDate', scheduledDate); 
+            startCountdown(scheduledDate);  
         }
     });
 
-    // Formani yuborishda, datetime pickerda tanlangan sanani formaga qo'shish
+    
     document.querySelector('form').addEventListener('submit', function (e) {
         const scheduledDate = document.getElementById('scheduledDatePicker').value;
         const scheduledDateInput = document.getElementById('scheduledDateInput');
 
         if (scheduledDate) {
-            scheduledDateInput.value = scheduledDate; // Formaga sana va vaqtni qo'shish
+            scheduledDateInput.value = scheduledDate; 
         }
     });
 
-    // Countdownni boshlash vaqti
+    
     function startCountdown(targetDate) {
         const countdownElement = document.getElementById('countdown');
-        const endTime = new Date(targetDate).getTime();  // Tanlangan vaqtni olish
-        countdownElement.style.display = 'block';  // Countdownni ko'rsatish
+        const endTime = new Date(targetDate).getTime();  
+        countdownElement.style.display = 'block';  
 
         const interval = setInterval(function () {
             const currentTime = new Date().getTime();
-            const remainingTime = endTime - currentTime; // Qolgan vaqtni hisoblash
+            const remainingTime = endTime - currentTime; 
 
             if (remainingTime <= 0) {
                 clearInterval(interval);
                 countdownElement.innerHTML = "Вақт тугади!";
-                localStorage.removeItem('scheduledDate'); // Vaqt tugagach, sana va vaqtni o'chirish
+                localStorage.removeItem('scheduledDate'); 
             } else {
                 const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
@@ -163,14 +163,14 @@
         }, 1000);
     }
 
-    // Vaqtni to'g'ri formatda ko'rsatish uchun funktsiya
+   
     function padTime(time) {
         return time < 10 ? "0" + time : time;
     }
 
-    // Sahifa yuklanganda checkbox va datetime pickerni sozlash
+    
     window.onload = function () {
-        // LocalStorage'dan tanlangan sana va vaqtni olish
+  
         const savedDate = localStorage.getItem('scheduledDate');
         const checkbox = document.getElementById('autoPublishCheckbox');
         const datePicker = document.getElementById('scheduledDatePicker');
@@ -178,16 +178,16 @@
         const countdown = document.getElementById('countdown');
 
         if (savedDate) {
-            checkbox.checked = true;  // Checkboxni tanlash
-            datePicker.value = savedDate;  // Tanlangan sana va vaqtni datetime pickerga qo'yish
-            scheduledDateInput.value = savedDate;  // Tanlangan sana va vaqtni hidden inputga qo'yish
-            countdown.style.display = 'block';  // Countdownni ko'rsatish
-            startCountdown(savedDate);  // Countdownni boshlash
+            checkbox.checked = true;  
+            datePicker.value = savedDate;  
+            scheduledDateInput.value = savedDate; 
+            countdown.style.display = 'block';  
+            startCountdown(savedDate);  
         } else {
-            countdown.style.display = 'none';  // Countdownni yashirish
+            countdown.style.display = 'none';  
         }
 
-        toggleDateTimePicker(); // Sahifa yuklanganda checkbox holatiga qarab datetime pickerni sozlash
+        toggleDateTimePicker(); 
     };
 
 </script>

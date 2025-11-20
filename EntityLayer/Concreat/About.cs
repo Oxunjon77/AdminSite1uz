@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace EntityLayer.Concreat
 {
-    public  class About
+    public class About
     {
         [Key]
         public int AboutId { get; set; }
-        
         [StringLength(1000)]
         public string AboutDetals1 { get; set; } = string.Empty;
 
